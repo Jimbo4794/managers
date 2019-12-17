@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.validation.constraints.NotNull;
-
 import java.util.Random;
 
 import com.google.gson.JsonArray;
@@ -80,7 +78,7 @@ public class DockerContainerImpl implements IDockerContainer {
         
         try {
             this.dss = framework.getDynamicStatusStoreService(dockerManager.NAMESPACE);
-            this.containerName = getContainerName(this.dockerSlot);
+            this.containerName = getContainerName();
         } catch (DynamicStatusStoreException e) {
             throw new DockerProvisionException("Failed to instantiate Docker container. Could not determine the container name from the DSS: ", e);
         }
@@ -405,7 +403,7 @@ public class DockerContainerImpl implements IDockerContainer {
      * @return String - name of container 
      * @throws DynamicStatusStoreException
      */
-    private String getContainerName(DockerSlotImpl dockerSlot2) throws DynamicStatusStoreException {
+    private String getContainerName() throws DynamicStatusStoreException {
         String slotName = dockerSlot.getSlotName();
         String runName = dss.get("server." + dockerServer.getHost() + ".slot." + slotName);
         //  E.g 'GALASA_U12_ExampleContainerName'

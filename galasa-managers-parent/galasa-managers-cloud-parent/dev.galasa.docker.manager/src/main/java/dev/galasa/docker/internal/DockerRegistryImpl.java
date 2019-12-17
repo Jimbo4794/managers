@@ -4,16 +4,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Base64;
-import java.util.ConcurrentModificationException;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 
 import dev.galasa.ICredentials;
@@ -97,7 +94,7 @@ public class DockerRegistryImpl {
 			registryAuthenticate(namespace, repository);
 			
 			//Artifactory repositories do not need a namespace
-			if (namespace != "") {
+			if (!"".equals(namespace)) {
 				namespace += "/";
 			}
 			String path = "/v2/" + namespace + repository + "/tags/list";

@@ -86,7 +86,7 @@ public class DockerImageImpl implements IDockerImage {
 		
 		repository = workingName;
     
-        if (namespace != "") {
+        if (!"".equals(namespace)) {
             workingName = namespace + "/" + repository + ":" + tag;
         } else {
             workingName = repository + ":" + tag;

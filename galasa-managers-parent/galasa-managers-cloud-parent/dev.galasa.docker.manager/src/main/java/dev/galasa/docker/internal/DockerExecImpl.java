@@ -95,7 +95,7 @@ public class DockerExecImpl implements IDockerExec {
 
         } catch(Exception e) {
             finished = true;
-            throw new DockerManagerException("");
+            throw new DockerManagerException(e);
         }
 
     }
@@ -123,6 +123,7 @@ public class DockerExecImpl implements IDockerExec {
             try {
                 Thread.sleep(100);
             } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new DockerManagerException("Wait for exec was interrupted", e);
             }
         }

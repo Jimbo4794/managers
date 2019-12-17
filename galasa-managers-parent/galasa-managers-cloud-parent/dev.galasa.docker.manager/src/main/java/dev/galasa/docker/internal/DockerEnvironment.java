@@ -34,7 +34,7 @@ public class DockerEnvironment implements IDockerEnvironment {
     private IFramework                          framework;
     private DockerManagerImpl                   dockerManager;
     private IDynamicStatusStoreService          dss;
-    private DockerServerImpl                    dockerServer;
+    protected DockerServerImpl                  dockerServer;
     private IDynamicResource                    dynamicResource;
     private Map<String, DockerContainerImpl>    containersByTag = new HashMap<String, DockerContainerImpl>();
     private boolean                             dockerServerChecked;
