@@ -5,7 +5,10 @@
  */
 package dev.galasa.http;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Path;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.w3c.dom.Document;
 
 import com.google.gson.JsonObject;
@@ -250,6 +255,22 @@ public interface IHttpClient {
      * @throws HttpClientException
      */
     HttpClientResponse<JsonObject> getJson(String url) throws HttpClientException;
+
+    /**
+     * Download a file from a specified location to a specified destination on local host.
+     * 
+     * @param Path destination - local location
+     * @param String path = URL path
+     */
+    CloseableHttpResponse getFile(String path) throws HttpClientException;
+
+    /**
+     * Send a compressed (tar) file from a local location to a specified destination on a host.
+     * 
+     * @param Sting path - URL path
+     * @param File file - tar archive file
+     */
+    void putFile(String path, InputStream file);
 
     /**
      * Get the SSL context used by this client

@@ -1,6 +1,7 @@
 package dev.galasa.docker.internal.properties;
 
 import dev.galasa.docker.DockerManagerException;
+import dev.galasa.docker.internal.DockerEngineImpl;
 import dev.galasa.framework.spi.ConfigurationPropertyStoreException;
 import dev.galasa.framework.spi.cps.CpsProperties;
 
@@ -10,7 +11,7 @@ import dev.galasa.framework.spi.cps.CpsProperties;
  * 
  * @galasa.cps.property
  * 
- * @galasa.name docker.engine.server
+ * @galasa.name docker.engine
  * 
  * @galasa.description Provides location of the Docker Engine
  * 
@@ -21,8 +22,8 @@ import dev.galasa.framework.spi.cps.CpsProperties;
  * @galasa.valid_values A valid DNS name or IPv4/6 address
  * 
  * @galasa.examples 
- * <code>docker.engine.server=docker.example.company.org<br>
- * docker.engine.server=192.168.2.3
+ * <code>docker.engine=docker.example.company.org<br>
+ * docker.engine=192.168.2.3
  * </code>
  * 
  * @galasa.extra
@@ -31,18 +32,18 @@ import dev.galasa.framework.spi.cps.CpsProperties;
  * If the Docker Engine is not using the default TCP port, you must provide the *docker.engine.port* configuration property in the CPS.
  * 
  */
-public class DockerServer extends CpsProperties {
+public class DockerEngine extends CpsProperties {
 
-    public static String get() throws DockerManagerException {
+    public static String get(final DockerEngineImpl dockerEngineImpl) throws DockerManagerException {
 		try {
-			String dockerServer = getStringNulled(DockerPropertiesSingleton.cps(), "engine", "server");
+			final String dockerEngine = getStringNulled(DockerPropertiesSingleton.cps(), "engine", "hostname", dockerEngineImpl.getEngineId());
 
-			if (dockerServer == null) {
-				throw new DockerManagerException("Could not find a docker server in CPS.");
+			if (dockerEngine == null) {
+				throw new DockerManagerException("Could not find a docker engine in CPS.");
 			}
-			return dockerServer;
-		} catch (ConfigurationPropertyStoreException e) {
-			throw new DockerManagerException("Problem asking the CPS for the docker server URI", e);
+			return dockerEngine;
+		} catch (final ConfigurationPropertyStoreException e) {
+			throw new DockerManagerException("Problem asking the CPS for the docker engine URI", e);
         }
 	}
 }
