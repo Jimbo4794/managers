@@ -60,6 +60,20 @@ import io.kubernetes.client.openapi.models.V1StatefulSetSpec;
 import io.kubernetes.client.proto.V1.Namespace;
 import io.kubernetes.client.util.Yaml;
 
+<<<<<<< HEAD
+=======
+/**
+ * The Kubernetes Namespace implementation.
+ * 
+ * The kubernetes manager will allocate a namespace for tests to work on.   These namespaces
+ * should be isolated just for use by the test.
+ * 
+ * See example scripts in examples/ to see how to create a name space with the necessary rbac.
+ * 
+ * @author Michael Baylis
+ *
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 public class KubernetesNamespaceImpl implements IKubernetesNamespace {
 
     private final static Log                 logger = LogFactory.getLog(KubernetesNamespaceImpl.class);
@@ -92,6 +106,15 @@ public class KubernetesNamespaceImpl implements IKubernetesNamespace {
         return this.cluster;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Initialise the namespace by creating a ConfigMap with the runname.  This is to ensure 
+     * that the namespace was clean and not in use.
+     * 
+     * @throws KubernetesManagerException If there is a problem with the cluster or the configmap already exists
+     */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     public void initialiseNamespace() throws KubernetesManagerException {
         ApiClient apiClient = this.cluster.getApi();
         CoreV1Api api = new CoreV1Api(apiClient);
@@ -121,17 +144,34 @@ public class KubernetesNamespaceImpl implements IKubernetesNamespace {
 
 
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+    /**
+     * Discard all the resources that are in the namespace
+     * 
+     * @param runName The runname the namespace was allocated to so we can clean up the DSS
+     * @throws KubernetesManagerException Any problem with teh cluster or DSS
+     */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     public void discard(String runName) throws KubernetesManagerException {
         if (cleanNamespace()) {
             clearSlot(runName);
         }
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Clean up the DSS and fee the slot
+     * 
+     * @param runName The runname the slot was allocated to
+     */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     private void clearSlot(String runName) {
         try {
             String namespacePrefix = "cluster." + this.cluster.getId() + ".namespace." + this.namespaceId;
@@ -293,6 +333,19 @@ public class KubernetesNamespaceImpl implements IKubernetesNamespace {
         }
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Called by the resource management clean up to discard the namespace
+     * 
+     * @param runName The runname the namespace was assigned to
+     * @param clusterId  The clusterid we are working on
+     * @param namespaceId the namespaceid we are discarding
+     * @param dss The DSS to clean
+     * @param framework A copy of the initialised framework
+     * @throws KubernetesManagerException Anything could go wrong!
+     */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     public static void deleteDss(String runName, String clusterId, String namespaceId, IDynamicStatusStoreService dss, IFramework framework) throws KubernetesManagerException {
         KubernetesClusterImpl cluster = new KubernetesClusterImpl(clusterId, dss, framework);
         KubernetesNamespaceImpl namespace = new KubernetesNamespaceImpl(cluster, namespaceId, framework, dss);

@@ -32,6 +32,10 @@ public class DockerEnvironment implements IDockerEnvironment {
     private IFramework                          framework;
     private DockerManagerImpl                   dockerManager;
     private IDynamicStatusStoreService          dss;
+<<<<<<< HEAD
+=======
+    // private DockerEngineImpl                    dockerEngine;
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     private IDynamicResource                    dynamicResource;
     private Map<String, DockerContainerImpl>    containersByTag = new HashMap<>();
     private Map<String, DockerEngineImpl>       enginesByTag = new HashMap<>();
@@ -210,6 +214,52 @@ public class DockerEnvironment implements IDockerEnvironment {
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Free a specifed docker slot in terms of the container and environment
+     * 
+     * @param dockerSlot
+     * @throws DockerProvisionException
+     */
+    @Override
+    public void freeDockerSlot(DockerSlotImpl dockerSlot) throws DockerProvisionException {
+        DockerEngineImpl dockerEngine = dockerSlot.getDockerEngine();
+        String dockerEngineId = dockerEngine.getEngineId();
+
+        try {
+            String currentSlot = dss.get("engine." + dockerEngineId + ".current.slots");
+            if (currentSlot == null){
+                return;
+            }
+            
+            int usedSlots = Integer.parseInt(currentSlot);
+            usedSlots--;
+            if (usedSlots < 0) {
+                usedSlots = 0;
+            }
+            dynamicResource.delete(dockerSlot.getResourcePropertyKeys());
+
+            String prefix = "engine." + dockerEngineId + ".slot." + dockerSlot.getSlotName();
+            HashMap<String,String> otherProps = new HashMap<>();
+            otherProps.put("slot." + dockerEngineId + ".run." + framework.getTestRunName() + "." + dockerSlot.getSlotName(), "free");
+            if(!dss.putSwap("engine." + dockerEngineId + ".current.slots", currentSlot, Integer.toString(usedSlots), otherProps)) {
+                Thread.sleep(200);
+                freeDockerSlot(dockerSlot);
+                return;
+            }
+
+            HashSet<String> delProps = new HashSet<>();
+            delProps.add(prefix);
+            delProps.add(prefix + ".allocated");
+            dss.delete(delProps);
+            logger.info("Discarding slot: " + dockerSlot.getSlotName() + ". on the socker engine: " + dockerEngineId);
+        }catch (Exception e) {
+            logger.warn("Failed to free slot on engine " + dockerEngineId + ", slot " + dockerSlot.getSlotName() + ", leaving for manager clean up routines", e);
+        }
+    }
+
+    /**
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
      * Builds the docker engine from the given annotation.
      * 
      * @param annotation
@@ -265,7 +315,17 @@ public class DockerEnvironment implements IDockerEnvironment {
 
         this.dynamicResource = this.dss.getDynamicResource("engine." + dockerEngineId);
 
+<<<<<<< HEAD
        return allocateAndCreateDssSlot(dockerEngineId, runName, engine);
+=======
+        if (allocateDssSlot(dockerEngineId, engine)) {
+            return createDssDockerSlot(dockerEngineId, runName, engine);
+        } else {
+            discard();
+            logger.info("No available slots currently");
+            throw new DockerProvisionException("No Docker slots available.");
+        }
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -276,6 +336,7 @@ public class DockerEnvironment implements IDockerEnvironment {
      * @return boolean (failed/passed)
      * @throws DockerProvisionException
      */
+<<<<<<< HEAD
     private DockerSlotImpl allocateAndCreateDssSlot(String dockerEngineId, String runName, DockerEngineImpl engine)
             throws DockerProvisionException {
         String slotKey = "engine." + dockerEngineId + ".current.slots";
@@ -286,6 +347,10 @@ public class DockerEnvironment implements IDockerEnvironment {
         
         HashMap<String,String> slotProps = new HashMap<>();
 
+=======
+    private boolean allocateDssSlot(String dockerEngineId, DockerEngineImpl engine) {
+        String slotKey = "engine." + dockerEngineId + ".current.slots";
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         try {
             int maxSlots = Integer.parseInt(DockerSlots.get(engine));
             int usedSlots = 0;
@@ -340,10 +405,27 @@ public class DockerEnvironment implements IDockerEnvironment {
      * @param dockerSlot
      * @throws DockerProvisionException
      */
+<<<<<<< HEAD
     @Override
     public void freeDockerSlot(DockerSlotImpl dockerSlot) throws DockerProvisionException {
         DockerEngineImpl dockerEngine = dockerSlot.getDockerEngine();
         String dockerEngineId = dockerEngine.getEngineId();
+=======
+    private DockerSlotImpl createDssDockerSlot(String dockerEngineId, String runName, DockerEngineImpl dockerEngine)
+            throws DockerProvisionException {
+        String slotNamePrefix = "SLOT_" + runName + "_";
+        String allocatedSlotName;
+        String allocatedTime = Instant.now().toString();
+        
+        try {
+            for (int i=0;;i++) {
+                allocatedSlotName = slotNamePrefix + i;
+
+                String slotPropertyKey = "engine." + dockerEngineId + ".slot." + allocatedSlotName;
+
+                HashMap<String,String> otherProps = new HashMap<>();
+                otherProps.put("slot."+ dockerEngineId + ".run." + runName + "." + allocatedSlotName, "active");
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
         try {
             String currentSlot = dss.get("engine." + dockerEngineId + ".current.slots");
@@ -358,6 +440,7 @@ public class DockerEnvironment implements IDockerEnvironment {
             }
             dynamicResource.delete(dockerSlot.getResourcePropertyKeys());
 
+<<<<<<< HEAD
             String prefix = "engine." + dockerEngineId + ".slot." + dockerSlot.getSlotName();
             String slotKey = "slot." + dockerEngineId + ".run." + framework.getTestRunName() + "." + dockerSlot.getSlotName();
             HashMap<String,String> otherProps = new HashMap<>();
@@ -366,6 +449,16 @@ public class DockerEnvironment implements IDockerEnvironment {
                 Thread.sleep(200);
                 freeDockerSlot(dockerSlot);
                 return;
+=======
+                    HashMap<String, String> resProps = new HashMap<>();
+                    resProps.put(resourcePropertyPrefix, runName);
+                    resProps.put(resourcePropertyPrefix + ".allocated", allocatedTime);
+                    
+                    dynamicResource.put(resProps);
+                    
+                    return new DockerSlotImpl(dockerManager, dockerEngine, allocatedSlotName, resProps);
+                }
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
             }
 
             HashSet<String> delProps = new HashSet<>();
@@ -379,6 +472,7 @@ public class DockerEnvironment implements IDockerEnvironment {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Used by resource management to clean up stale properties
      * 
@@ -388,6 +482,9 @@ public class DockerEnvironment implements IDockerEnvironment {
      * @param dss
      */
     public static void deleteStaleDssSlot(String runName, String dockerEngineId, String slotName, IDynamicStatusStoreService dss) {
+=======
+    public static void deleteDss(String runName, String dockerEngineId, String slotName, IDynamicStatusStoreService dss) {
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         try {
             IDynamicResource dynamicResource = dss.getDynamicResource("engine." + dockerEngineId);
             String resPrefix = "slot." + slotName;

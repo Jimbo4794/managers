@@ -8,7 +8,10 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+<<<<<<< HEAD
 import java.nio.file.Paths;
+=======
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
 import dev.galasa.Test;
 import dev.galasa.artifact.ArtifactManager;
@@ -93,7 +96,11 @@ public class DockerManagerIVT {
         InputStream isHtml =  bundleResources.retrieveFile("/test1.html");
 
         // Store it in the container 
+<<<<<<< HEAD
         container.storeFile("/usr/local/apache2/htdocs/test1.html", isHtml);     
+=======
+//        container.storeFile("/usr/local/apache2/htdocs/test1.html", isHtml);     
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         
         // Check it is there via ls command
         IDockerExec exec = container.exec("/bin/ls","-l","/usr/local/apache2/htdocs/test1.html");
@@ -123,6 +130,7 @@ public class DockerManagerIVT {
        String html = httpClient.get("/test1.html");
        
        assertThat(html).as("Checking the HTML container the JAT constant text").contains("JAT Docker Test");
+<<<<<<< HEAD
     }
     
     /**
@@ -138,6 +146,23 @@ public class DockerManagerIVT {
         assertThat(log).as("checking that the test1.html was retrieved and logged").contains("\"GET /test1.html HTTP/1.1\" 200");
     }
     
+=======
+    }
+    
+    /**
+     * Check to container logs to ensure the file was retrieved
+     * 
+     * @throws DockerManagerException if there is a problem with the docker manager
+     */
+    @Test
+    public void retrieveContainerLog() throws DockerManagerException {
+        String log = container.retrieveStdOut();
+        logger.info("Container Log:-\n" + log);
+        
+        assertThat(log).as("checking that the test1.html was retrieved and logged").contains("\"GET /test1.html HTTP/1.1\" 200");
+    }
+    
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     
     /**
      * Pull back the test file and see if it contains the test ext
@@ -146,8 +171,18 @@ public class DockerManagerIVT {
      */
     @Test
     public void retrieveFile() throws DockerManagerException {
+<<<<<<< HEAD
        String htmlTest1 = container.retrieveFile("/usr/local/apache2/htdocs/test1.html");
         
        assertThat(htmlTest1).as("check we can pull back the file").contains("<h1>JAT Docker Test</h1>");
     }   
+=======
+//        String htmlTest1 = container.retrieveFile("/usr/local/apache2/htdocs/test1.html");
+        
+//        assertThat(htmlTest1).as("check we can pull back the file").contains("<h1>JAT Docker Test</h1>");
+
+    }
+    
+    
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 }

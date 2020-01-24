@@ -23,9 +23,13 @@ public class DockerResourceMonitor implements Runnable {
     private final IResourceManagement           resourceManagement;
     private final IDynamicStatusStoreService    dss;
     private final Log                           logger = LogFactory.getLog(DockerResourceMonitor.class);
+<<<<<<< HEAD
                                                                     //dss.docker.slot.default.run.L7.SLOT_L7_0=free
     private final Pattern                       slotRunPattern = Pattern.compile("^slot\\.(\\w+)\\.run\\.(\\w+)\\.(\\w+)");
 
+=======
+    private final Pattern                       slotRunPattern = Pattern.compile("^slot\\.run\\.(\\w+)\\.engine\\.(\\w+)\\.slot\\.(\\w+)$");
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
    /**
     * Docker resource monitor
@@ -63,13 +67,21 @@ public class DockerResourceMonitor implements Runnable {
 					String runName = matcher.group(2);
 
 					if (!activeRunNames.contains(runName)) {
+<<<<<<< HEAD
 						String dockerEngine = matcher.group(1);
+=======
+						String dockerEngine = matcher.group(2);
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 						String slot    = matcher.group(3);
 
 						logger.info("Discarding slot " + slot + " on docker engine " + dockerEngine + " as run " + runName + " has gone");
 
 						try {
+<<<<<<< HEAD
 							DockerEnvironment.deleteStaleDssSlot(runName, dockerEngine, slot, dss);
+=======
+							DockerEnvironment.deleteDss(runName, dockerEngine, slot, dss);
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 						} catch(Exception e) {
 							logger.error("Failed to discard slot " + slot + " on image " + dockerEngine + " as run " + runName);
 						}
@@ -97,7 +109,11 @@ public class DockerResourceMonitor implements Runnable {
 					logger.info("Discarding slot " + slot + " on image " + dockerEngine + " as run " + runName + " has gone");
 
 					try {
+<<<<<<< HEAD
 						DockerEnvironment.deleteStaleDssSlot(runName, dockerEngine, slot, dss);
+=======
+						DockerEnvironment.deleteDss(runName, dockerEngine, slot, dss);
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 					} catch(Exception e) {
 						logger.error("Failed to discard slot " + slot + " on image " + dockerEngine + " as run " + runName);
 					}

@@ -9,10 +9,15 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+<<<<<<< HEAD
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+=======
+import java.io.FileOutputStream;
+import java.io.IOException;
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -763,6 +768,7 @@ public class HttpClientImpl implements IHttpClient {
                 jaxbClasses, retry);
     }
 
+<<<<<<< HEAD
     public CloseableHttpResponse getFile(String path) throws HttpClientException {
         try{
             HttpClientRequest request = HttpClientRequest.newGetRequest(buildUri(path, null).toString(),
@@ -810,6 +816,35 @@ public class HttpClientImpl implements IHttpClient {
             }
         } else {
             throw new HttpClientException("Data was not an expected object type");
+=======
+    public void getFile(Path destination, String path) {
+        try{
+            HttpClientRequest request = HttpClientRequest.newGetRequest(buildUri(path, null).toString(),
+                new ContentType[] { ContentType.APPLICATION_OCTET_STREAM });
+
+            CloseableHttpResponse repsonse = execute(request.buildRequest());
+            OutputStream output = Files.newOutputStream(destination);
+            
+            IOUtils.copy(repsonse.getEntity().getContent(), output);
+            repsonse.close();
+        } catch (Exception e) {
+            logger.error("Could not download file from speficifed path: "+ path, e);
+        }
+    }
+
+    public void putFile(String path, File file) {
+        try {
+            HttpClientRequest request = HttpClientRequest.newPutRequest(buildUri(path, null).toString(),
+                new ContentType[] { ContentType.APPLICATION_XML, ContentType.APPLICATION_JSON, ContentType.TEXT_PLAIN } ,
+                ContentType.APPLICATION_X_TAR);
+
+            request.setBody(file);
+
+            CloseableHttpResponse response = execute(request.buildRequest());
+            response.close();
+        } catch (HttpClientException | IOException e) {
+
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         }
     }
 

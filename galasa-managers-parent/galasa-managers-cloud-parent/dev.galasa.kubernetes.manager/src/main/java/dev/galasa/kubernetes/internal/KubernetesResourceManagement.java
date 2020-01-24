@@ -1,7 +1,11 @@
 /*
  * Licensed Materials - Property of IBM
  * 
+<<<<<<< HEAD
  * (c) Copyright IBM Corp. 2019.
+=======
+ * (c) Copyright IBM Corp. 2020.
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
  */
 package dev.galasa.kubernetes.internal;
 
@@ -17,6 +21,15 @@ import dev.galasa.framework.spi.IResourceManagementProvider;
 import dev.galasa.framework.spi.ResourceManagerException;
 import dev.galasa.kubernetes.internal.properties.KubernetesPropertiesSingleton;
 
+<<<<<<< HEAD
+=======
+/**
+ * Initialise the Resource Management routines for the Kubernetes Manager 
+ * 
+ * @author Michael Baylis
+ *
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 @Component(service= {IResourceManagementProvider.class})
 public class KubernetesResourceManagement implements IResourceManagementProvider {
 

@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+/*
+ * Licensed Materials - Property of IBM
+ * 
+ * (c) Copyright IBM Corp. 2020.
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 package dev.galasa.kubernetes.internal;
 
 import java.lang.annotation.Annotation;
@@ -35,6 +43,15 @@ import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.openapi.models.V1StatefulSet;
 import io.kubernetes.client.util.Yaml;
 
+<<<<<<< HEAD
+=======
+/**
+ * The Kubernetes Manager implementation
+ * 
+ * @author Michael Baylis
+ *
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 @Component(service = { IManager.class })
 public class KubernetesManagerImpl extends AbstractManager implements IKubernetesManagerSpi {
 
@@ -74,6 +91,10 @@ public class KubernetesManagerImpl extends AbstractManager implements IKubernete
 
         youAreRequired(allManagers, activeManagers);
         
+<<<<<<< HEAD
+=======
+        //*** Initialise the CPS and DSS fields
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         try {
             KubernetesPropertiesSingleton.setCps(getFramework().getConfigurationPropertyService(NAMESPACE));
         } catch (ConfigurationPropertyStoreException e) {
@@ -86,7 +107,11 @@ public class KubernetesManagerImpl extends AbstractManager implements IKubernete
             throw new KubernetesManagerException("Unable to provide the DSS for the Kubernetes Manager", e);
         }
 
+<<<<<<< HEAD
         //*** Load the YAML supported types
+=======
+        //*** Load the YAML supported types so that the YAML can serialize
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         Yaml.addModelMap("v1", "ConfigMap", V1ConfigMap.class);
         Yaml.addModelMap("v1", "PersistentVolumeClaim", V1PersistentVolumeClaim.class);
         Yaml.addModelMap("v1", "Service", V1Service.class);
@@ -189,6 +214,12 @@ public class KubernetesManagerImpl extends AbstractManager implements IKubernete
     }
 
 
+<<<<<<< HEAD
+=======
+    /**
+     * Delete all the supported resources in the namespaces
+     */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     @Override
     public void provisionDiscard() {
 

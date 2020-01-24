@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+/*
+ * Licensed Materials - Property of IBM
+ * 
+ * (c) Copyright IBM Corp. 2020.
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 package dev.galasa.kubernetes.internal.resources;
 
 import java.util.List;
@@ -9,6 +17,15 @@ import dev.galasa.kubernetes.internal.KubernetesNamespaceImpl;
 import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.util.Yaml;
 
+<<<<<<< HEAD
+=======
+/**
+ * Deployment Implementation
+ * 
+ * @author Michael Baylis
+ *
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 public class DeploymentImpl extends ReplicaSetHolder implements IDeployment {
     
     private final KubernetesNamespaceImpl namespace;

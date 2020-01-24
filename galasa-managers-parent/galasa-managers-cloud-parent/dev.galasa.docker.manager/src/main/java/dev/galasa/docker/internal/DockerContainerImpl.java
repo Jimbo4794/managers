@@ -16,7 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+<<<<<<< HEAD
 import java.util.zip.GZIPOutputStream;
+=======
+
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 import java.util.Random;
 
 import com.google.gson.JsonArray;
@@ -46,6 +50,7 @@ public class DockerContainerImpl implements IDockerContainer {
 
     private static final String CONTAINER_NAME_PREFIX = "GALASA_";
 
+<<<<<<< HEAD
     private IFramework framework;
     private DockerManagerImpl dockerManager;
     private String tag;
@@ -56,6 +61,18 @@ public class DockerContainerImpl implements IDockerContainer {
     private IDynamicStatusStoreService dss;
     private String containerID;
     private String containerName;
+=======
+    private IFramework                      framework;
+    private DockerManagerImpl               dockerManager;
+    private String                          tag;
+    private DockerEngineImpl                dockerEngine;
+    private DockerImageImpl                 image;
+    private Boolean                         autoStartup;
+    private DockerSlotImpl                  dockerSlot;
+    private IDynamicStatusStoreService      dss;
+    private String                          containerID;
+    private String                          containerName;
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
     private boolean leaveRunning;
     private boolean alreadyUp;
@@ -79,6 +96,7 @@ public class DockerContainerImpl implements IDockerContainer {
      * @throws DockerProvisionException
      */
     public DockerContainerImpl(IFramework framework, DockerManagerImpl dockerManager, String tag,
+<<<<<<< HEAD
             DockerEngineImpl dockerEngine, DockerImageImpl image, Boolean start, DockerSlotImpl slot)
             throws DockerProvisionException {
         this.framework = framework;
@@ -89,6 +107,17 @@ public class DockerContainerImpl implements IDockerContainer {
         this.autoStartup = start;
         this.dockerSlot = slot;
 
+=======
+            DockerEngineImpl dockerEngine, DockerImageImpl image, Boolean start, DockerSlotImpl slot) throws DockerProvisionException {
+        this.framework              = framework;
+        this.dockerManager          = dockerManager;
+        this.tag                    = tag;
+        this.dockerEngine           = dockerEngine;
+        this.image                  = image;
+        this.autoStartup            = start;
+        this.dockerSlot             = slot;
+        
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         try {
             this.dss = framework.getDynamicStatusStoreService(dockerManager.NAMESPACE);
             this.containerName = getContainerName(this.dockerSlot);
@@ -127,6 +156,7 @@ public class DockerContainerImpl implements IDockerContainer {
                     JsonObject create = new JsonObject();
                     create.addProperty("Image", this.image.getFullName());
 
+<<<<<<< HEAD
                     JsonObject hostConfig = new JsonObject();
                     hostConfig.addProperty("PublishAllPorts", Boolean.TRUE);
                     create.add("HostConfig", hostConfig);
@@ -149,6 +179,31 @@ public class DockerContainerImpl implements IDockerContainer {
         } catch (DockerManagerException | DynamicStatusStoreException e) {
             throw new DockerProvisionException("Unable to prepare the Docker Container '" + this.tag + "'", e);
         }
+=======
+					JsonObject hostConfig = new JsonObject();
+					hostConfig.addProperty("PublishAllPorts", Boolean.TRUE);
+					create.add("HostConfig", hostConfig);
+
+
+					logger.debug("Creating Docker Container '" + tag + "'");
+					JsonObject newContainer = dockerEngine.createContainer(containerName, create);
+					logger.debug("Created Docker Container '" + tag + "'");
+					containerID = newContainer.get("Id").getAsString();
+					if (containerID == null || containerID.trim().isEmpty()) {
+						throw new DockerManagerException("Container ID is missing");
+					}
+				} catch(DockerManagerException e) {
+					throw e;
+				} catch(Exception e) {
+					throw new DockerManagerException("Unable to create the Docker Container '" + this.tag + "'", e);
+				}
+			}
+
+			logger.info("Container '" + tag + "' created under name '" + containerName + "'");
+		} catch(DockerManagerException | DynamicStatusStoreException e) {
+			throw new DockerProvisionException("Unable to prepare the Docker Container '" + this.tag + "'", e);
+		}
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -161,8 +216,12 @@ public class DockerContainerImpl implements IDockerContainer {
     }
 
     /**
+<<<<<<< HEAD
      * Passed the docker start commands to the docker engine if the container is not
      * already running.
+=======
+     * Passed the docker start commands to the docker engine if the container is not already running.
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
      * 
      * @throws DockerManagerException
      */
@@ -196,9 +255,13 @@ public class DockerContainerImpl implements IDockerContainer {
     }
 
     /**
+<<<<<<< HEAD
      * Passes the docker stop command to the docker engine if the container is nor
      * already stopped
      * 
+=======
+     * Passes the docker stop command to the docker engine if the container is nor already stopped
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
      * @throws DockerManagerException
      */
     private void stopDockerContainer() throws DockerManagerException {
@@ -250,8 +313,12 @@ public class DockerContainerImpl implements IDockerContainer {
     }
 
     /**
+<<<<<<< HEAD
      * Used by the extractContainerExposedPortsFromDockerEngine() to retrieve ports
      * from the container information.
+=======
+     * Used by the extractContainerExposedPortsFromDockerEngine() to retrieve ports from the container information.
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
      * 
      * @param containerInfo
      * @return Ports
@@ -266,8 +333,12 @@ public class DockerContainerImpl implements IDockerContainer {
     }
 
     /**
+<<<<<<< HEAD
      * Returns a list of sockets from the JsonObect containing ports, used by the
      * extractContainerExposedPortsFromDockerEngine()
+=======
+     * Returns a list of sockets from the JsonObect containing ports, used by the extractContainerExposedPortsFromDockerEngine()
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
      * 
      * @param portEntry
      * @return Sockets
@@ -392,6 +463,7 @@ public class DockerContainerImpl implements IDockerContainer {
     @Override
     public boolean isRunning() throws DockerManagerException {
         JsonObject response = dockerEngine.getContainer(containerName);
+<<<<<<< HEAD
         JsonObject state = response.get("State").getAsJsonObject();
         if (state == null) {
             return false;
@@ -399,6 +471,15 @@ public class DockerContainerImpl implements IDockerContainer {
         Boolean running = state.get("Running").getAsBoolean();
 
         return running;
+=======
+		JsonObject state = response.get("State").getAsJsonObject();
+		if (state == null) {
+			return false;
+		}
+		Boolean running = state.get("Running").getAsBoolean();
+
+		return running;
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -410,6 +491,7 @@ public class DockerContainerImpl implements IDockerContainer {
     @Override
     public long getExitCode() throws DockerManagerException {
         JsonObject response = dockerEngine.getContainer(containerName);
+<<<<<<< HEAD
         JsonObject state = response.get("State").getAsJsonObject();
         if (state == null) {
             return -1;
@@ -417,6 +499,15 @@ public class DockerContainerImpl implements IDockerContainer {
         Long exitCode = state.get("ExitCode").getAsLong();
 
         return exitCode;
+=======
+		JsonObject state = response.get("State").getAsJsonObject();
+		if (state == null) {
+			return -1;
+		}
+		Long exitCode = state.get("ExitCode").getAsLong();
+	
+		return exitCode;
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -441,7 +532,11 @@ public class DockerContainerImpl implements IDockerContainer {
     private String getContainerName(DockerSlotImpl dockerSlot2) throws DynamicStatusStoreException {
         String slotName = dockerSlot.getSlotName();
         String runName = dss.get("engine." + dockerEngine.getEngineId() + ".slot." + slotName);
+<<<<<<< HEAD
         // E.g 'GALASA_U12_ExampleContainerName'
+=======
+        //  E.g 'GALASA_U12_ExampleContainerName'
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
         return CONTAINER_NAME_PREFIX + runName + "_" + this.tag;
     }
 
@@ -462,7 +557,11 @@ public class DockerContainerImpl implements IDockerContainer {
     }
 
     /**
+<<<<<<< HEAD
      * Used by the checkContainer() to collect the state from the docker engine.
+=======
+     * Used by the checkContainer() to collect the state from the docker engine. 
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
      * 
      * If the container is not as expected then it is attempted to be resolved.
      * 
@@ -471,6 +570,7 @@ public class DockerContainerImpl implements IDockerContainer {
     private void checkContainerState() throws DockerManagerException {
         JsonObject response = dockerEngine.getContainer(containerName);
 
+<<<<<<< HEAD
         if (response != null) {
             logger.debug("Docker Container '" + this.tag + "' is already defined");
             alreadyDefined = true;
@@ -504,6 +604,41 @@ public class DockerContainerImpl implements IDockerContainer {
             alreadyDefined = false;
             alreadyUp = false;
         }
+=======
+			if (response != null) {
+				logger.debug("Docker Container '" + this.tag + "' is already defined");
+				alreadyDefined = true;
+				containerID = response.get("Id").getAsString();
+
+				JsonObject state = (JsonObject) response.get("State");
+				alreadyUp = state.get("Running").getAsBoolean();	
+				if (alreadyUp) {
+					logger.debug("Docker Container '" + this.tag + "' is already running");
+				}
+
+				if (!leaveRunning && (alreadyUp || alreadyDefined)) {
+					logger.debug("Tidying up the Docker Container as leave.running is not true");
+					if (alreadyUp) {
+						killContainer();
+					}
+					if (alreadyDefined) {
+						deleteContainer();
+					}
+					alreadyUp      = false;
+					alreadyDefined = false;
+				} 
+
+				if (alreadyDefined) {
+					JsonObject config = response.get("Config").getAsJsonObject();
+					String imageName = config.get("Image").getAsString();
+					this.image.setFullName(imageName); 
+				}
+			} else {
+                logger.debug("No response, not defined or running");
+				alreadyDefined = false;
+				alreadyUp = false;
+			}
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -513,8 +648,13 @@ public class DockerContainerImpl implements IDockerContainer {
      */
     private void deleteContainer() throws DockerManagerException {
         logger.debug("Deleting Docker Container '" + tag + "'");
+<<<<<<< HEAD
         dockerEngine.deleteContainer(containerID);
         logger.info("Deleted Docker Container '" + tag + "'");
+=======
+		dockerEngine.deleteContainer(containerID);
+		logger.info("Deleted Docker Container '" + tag + "'");
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -524,8 +664,13 @@ public class DockerContainerImpl implements IDockerContainer {
      */
     private void killContainer() throws DockerManagerException {
         logger.debug("Killing Docker Container '" + tag + "'");
+<<<<<<< HEAD
         dockerEngine.killContainer(containerID);
         logger.info("Killed Docker Container '" + tag + "'");
+=======
+	    dockerEngine.killContainer(containerID);
+	    logger.info("Killed Docker Container '" + tag + "'");
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
     }
 
     /**
@@ -535,7 +680,11 @@ public class DockerContainerImpl implements IDockerContainer {
      */
     public DockerEngineImpl getDockerEngineImpl() {
         return dockerEngine;
+<<<<<<< HEAD
     }
+=======
+	}
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
     /**
      * Retrieves the docker running ID

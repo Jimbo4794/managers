@@ -6,7 +6,10 @@
 package dev.galasa.http;
 
 import java.io.File;
+<<<<<<< HEAD
 import java.io.InputStream;
+=======
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 import java.net.URI;
 import java.nio.file.Path;
 import java.security.KeyStore;
@@ -262,7 +265,11 @@ public interface IHttpClient {
      * @param Path destination - local location
      * @param String path = URL path
      */
+<<<<<<< HEAD
     CloseableHttpResponse getFile(String path) throws HttpClientException;
+=======
+    void getFile(Path destination, String path);
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
     /**
      * Send a compressed (tar) file from a local location to a specified destination on a host.
@@ -270,7 +277,11 @@ public interface IHttpClient {
      * @param Sting path - URL path
      * @param File file - tar archive file
      */
+<<<<<<< HEAD
     void putFile(String path, InputStream file);
+=======
+    void putFile(String path, File file);
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 
     /**
      * Get the SSL context used by this client

@@ -1,7 +1,11 @@
 /*
  * Licensed Materials - Property of IBM
  * 
+<<<<<<< HEAD
  * (c) Copyright IBM Corp. 2019.
+=======
+ * (c) Copyright IBM Corp. 2020.
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
  */
 package dev.galasa.kubernetes.internal;
 
@@ -18,6 +22,15 @@ import dev.galasa.framework.spi.IDynamicStatusStoreService;
 import dev.galasa.framework.spi.IFramework;
 import dev.galasa.framework.spi.IResourceManagement;
 
+<<<<<<< HEAD
+=======
+/**
+ * Clean up namespaces when a run is finished with it.
+ * 
+ * @author Michael Baylis
+ *
+ */
+>>>>>>> 71f0c491713d22bdaae4c92c34e8aceddb5145ed
 public class KubernetesNamespaceResourceMonitor implements Runnable {
 
 	private final IFramework                 framework;
