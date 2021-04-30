@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 
 import dev.galasa.Test;
 import dev.galasa.core.manager.Logger;
+import dev.galasa.selenium.Browser;
 import dev.galasa.selenium.IFirefoxOptions;
 import dev.galasa.selenium.ISeleniumManager;
 import dev.galasa.selenium.IWebPage;
@@ -23,9 +24,15 @@ public class SeleniumManagerIVT {
 
     @Logger
     public Log logger;
-
-    @SeleniumManager
+ 
+    @SeleniumManager()
     public ISeleniumManager seleniumManager;
+    
+    @SeleniumManager(browser = Browser.ANYAVAIALBLE)
+    public ISeleniumManager seleniumManager2;
+    
+    @SeleniumManager(browser = Browser.ANYAVAIALBLE)
+    public ISeleniumManager seleniumManager3;
 
     public static final String WEBSITE = "https://duckduckgo.com";
     public static final String TITLE = "DuckDuckGo";

@@ -35,6 +35,7 @@ import dev.galasa.http.spi.IHttpManagerSpi;
 import dev.galasa.kubernetes.spi.IKubernetesManagerSpi;
 import dev.galasa.selenium.Browser;
 import dev.galasa.selenium.ISeleniumManager;
+import dev.galasa.selenium.ISeleniumManagerTemp;
 import dev.galasa.selenium.SeleniumManager;
 import dev.galasa.selenium.SeleniumManagerException;
 import dev.galasa.selenium.SeleniumManagerField;
@@ -42,7 +43,7 @@ import dev.galasa.selenium.internal.properties.SeleniumPropertiesSingleton;
 import dev.galasa.selenium.internal.properties.SeleniumScreenshotFailure;
 
 @Component(service = { IManager.class })
-public class SeleniumManagerImpl extends AbstractManager {
+public class SeleniumManagerImpl extends AbstractManager implements ISeleniumManagerTemp {
 	
 	private static final Log logger = LogFactory.getLog(SeleniumManagerImpl.class);
 
@@ -189,5 +190,9 @@ public class SeleniumManagerImpl extends AbstractManager {
     }
     public IHttpManagerSpi getHttpManager() {
     	return this.httpManager;
+    }
+
+    public ISeleniumManager provisionWebDriver(Browser browser) throws ResourceUnavailableException, SeleniumManagerException {
+        return this.seleniumEnvironment.allocateDriver(browser);
     }
 }
